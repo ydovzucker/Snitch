@@ -1,0 +1,12 @@
+# Ignore Visual Studio-related folders
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore temporary files
+*.log
+*.tmp
