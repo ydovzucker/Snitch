@@ -9,11 +9,13 @@ class Dal
         try
         {
             string connStr = "server=localhost;username=root;password=;database=snitch_form";
+            logger.WriteLog("connectedto data base");
             return new MySqlConnection(connStr);
+            
         }
         catch(Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"Error: {ex.Message}");
             return null;
         }
     }
@@ -32,6 +34,7 @@ class Dal
                 MySqlCommand cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@firstName", firstName.Trim());
                 cmd.Parameters.AddWithValue("@lastName", lastName.Trim());
+                
 
                 return Convert.ToInt64(cmd.ExecuteScalar()) > 0;
             }
@@ -39,6 +42,7 @@ class Dal
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"couldn't check if person exits because of Error: {ex.Message} ");
             return false;
         }
     
@@ -56,11 +60,14 @@ class Dal
                 command.Parameters.AddWithValue("@firstName", firstName.Trim());
                 command.Parameters.AddWithValue("@lastName", lastName.Trim());
                 command.ExecuteNonQuery();
+                ;
             }
+            logger.WriteLog($"added {firstName} {lastName} to the people tabel");
         }
+        
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"coulden't add person {firstName} {lastName} Error: {ex.Message}");
             
         }
     }
@@ -85,12 +92,12 @@ class Dal
                 command.Parameters.AddWithValue("@lastName", lastName);
 
                 int rowsAffected = command.ExecuteNonQuery();
-                Console.WriteLine($"Secret code set for {firstName} {lastName}? {rowsAffected > 0}");
+                logger.WriteLog($"added secret code for {firstName} {lastName} to the people tabel");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"coulden't add secret code {firstName} {lastName} Error: {ex.Message}");
    
         }
     }
@@ -106,6 +113,7 @@ class Dal
 
                 command.Parameters.AddWithValue("@type", type);
                 command.ExecuteNonQuery();
+                
             }
         }
         catch (Exception ex)
@@ -131,13 +139,16 @@ class Dal
                 {
                     return null;
                 }
-
+                
                 return result.ToString();
+                
             }
+            
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"couldent check type for {firstName} {lastName}Error: {ex.Message}");
+
             return null;
 
         }
@@ -157,10 +168,11 @@ class Dal
                 cmd.Parameters.AddWithValue("@lastName", lastName.Trim());
                 cmd.ExecuteNonQuery();
             }
+            logger.WriteLog($"set type for reporter {firstName} {lastName}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($" couldent set type for reporter {firstName} {lastName}Error: {ex.Message}");
 
         }
     }
@@ -177,10 +189,11 @@ class Dal
                 cmd.Parameters.AddWithValue("@lastName", lastName.Trim());
                 cmd.ExecuteNonQuery();
             }
+            logger.WriteLog($"set type for target {firstName} {lastName}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($" couldent set type for target {firstName} {lastName}Error: {ex.Message}");
 
         }
     }
@@ -207,12 +220,14 @@ class Dal
                     cmd.Parameters.AddWithValue("@firstName", firstName.Trim());
                     cmd.Parameters.AddWithValue("@lastName", lastName.Trim());
                     cmd.ExecuteNonQuery();
+                    logger.WriteLog($"set type for reporter {firstName} {lastName}");
                 }
             }
+            logger.WriteLog($"set type for reporter {firstName} {lastName}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($" couldn't set type reporter for {firstName} {lastName} Error: {ex.Message}");
 
         }
     }
@@ -241,10 +256,11 @@ class Dal
                     cmd.ExecuteNonQuery();
                 }
             }
+            logger.WriteLog($"set type for target {firstName} {lastName}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($" couldn't set type reporter for {firstName} {lastName} Error: {ex.Message}");
 
         }
     }
@@ -408,7 +424,7 @@ class Dal
 
                                 if (reportCount >= 10 && avgTextLength >= 100)
                                 {
-                                    Console.WriteLine($"{firstName} {lastName} upgraded to potential_agent (Reports: {reportCount}, Avg Length: {avgTextLength})");
+                                    logger.WriteLog($"{firstName} {lastName} upgraded to potential_agent (Reports: {reportCount}, Avg Length: {avgTextLength})");
 
                                     reader.Close();
 
@@ -422,6 +438,7 @@ class Dal
                                         updateCmd.Parameters.AddWithValue("@firstName", firstName.Trim());
                                         updateCmd.Parameters.AddWithValue("@lastName", lastName.Trim());
                                         updateCmd.ExecuteNonQuery();
+                                        logger.WriteLog($"set type potential reporter for {firstName} {lastName}");
                                     }
                                 }
                             }
@@ -432,7 +449,7 @@ class Dal
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"couldn't update type potential agent for {firstName} {lastName} Error: {ex.Message}");
 
         }
     }
@@ -460,7 +477,7 @@ class Dal
                         int mentionCount = Convert.ToInt32(result);
                         if (mentionCount >= 20)
                         {
-                            Console.WriteLine($"⚠️ ALERT: {firstName} {lastName} is a potential threat (mentions: {mentionCount})");
+                            logger.WriteLog($"⚠️ ALERT: {firstName} {lastName} is a potential threat (mentions: {mentionCount})");
                         }
                     }
                 }
@@ -468,7 +485,7 @@ class Dal
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"couldent update type potential threat for {firstName} {lastName} Error: {ex.Message}");
 
         }
     }
@@ -503,14 +520,15 @@ class Dal
 
                     if (count >= 3)
                     {
-                        Console.WriteLine($"⚠️ ALERT: {firstName} {lastName} has submitted {count} reports in the last 15 minutes!");
+                        logger.WriteLog($"⚠️ ALERT: {firstName} {lastName} has submitted {count} reports in the last 15 minutes!");
                     }
                 }
             }
         }
+
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            logger.WriteLog($"couldn't crate ALERT for {firstName} {lastName} he has submitted over 3 reports in the last 15 minutes!\" Error: {ex.Message}");
 
         }
     }
