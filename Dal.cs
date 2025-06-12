@@ -3,6 +3,7 @@ using System;
 
 class Dal
 {
+    private readonly Loging logger = new Loging(); 
     private MySqlConnection ConnectToDataBase()
     {
         try

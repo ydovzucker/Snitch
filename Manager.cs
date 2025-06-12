@@ -37,8 +37,15 @@ class Manager
         try
         {
             string managerPassword = "SnitchMaster!";
-            Console.WriteLine("Welcome to the Snitch System!");
-            Console.Write("Are you the manager or the reporter?  ");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("=======================================");
+            Console.WriteLine("         Welcome to MALSHINON          ");
+            Console.WriteLine("=======================================");
+            Console.WriteLine("     Monitoring and Reporting System    ");
+            Console.ResetColor();
+
+            Console.WriteLine(); 
+            Console.Write("Are you the manager or a reporter? ");
             string Role = Console.ReadLine().Trim().ToLower();
             if (Role == "manager")
             {
@@ -46,14 +53,24 @@ class Manager
                 string password = Console.ReadLine();
                 if (password == managerPassword)
                 {
-                    Console.WriteLine("welcom back manager!");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("---------------------------------------");
+                    Console.WriteLine("      Welcome back, Manager! 👔        ");
+                    Console.WriteLine("  Ready to review the latest reports?  ");
+                    Console.WriteLine("---------------------------------------");
+                    Console.ResetColor();
                     ShowMenuForManager();
                 }
 
             }
             else if (Role == "reporter")
             {
-                Console.WriteLine("thank you for sharing information! lets start!");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("----------------------------------------");
+                Console.WriteLine(" Thank you for sharing your information!");
+                Console.WriteLine("             Let's get started!          ");
+                Console.WriteLine("----------------------------------------");
+                Console.ResetColor();
                 string firstName = Intel.GetFirstName();
                 string lastName = Intel.GetLastName();
 

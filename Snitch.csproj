@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeFile1.cs" />
     <Compile Include="Dal.cs" />
     <Compile Include="Intel.cs" />
     <Compile Include="Manager.cs" />
